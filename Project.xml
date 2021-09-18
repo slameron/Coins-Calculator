@@ -16,7 +16,7 @@
 	<!-- ____________________________ Window Settings ___________________________ -->
 
 	<!--These window settings apply to all targets-->
-	<window width="640" height="480" fps="60" background="#000000" hardware="true" vsync="false" />
+	<window width="1280" height="720" fps="60" background="#000000" hardware="true" vsync="false" />
 
 	<!--HTML5-specific-->
 	<window if="html5" resizable="false" />
@@ -81,4 +81,11 @@
 	<!-- _________________________________ Custom _______________________________ -->
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
+
+	<!--<icon path="assets/images/icon/icon32.png" size='32'/>
+	<icon path="assets/images/icon/icon64.png" size='64'/>
+
+	<icon path="assets/images/icon/icon128.png" size = "128" />
+
+	<icon path="assets/images/icon.svg" />-->	
 </project>
