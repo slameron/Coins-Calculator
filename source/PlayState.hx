@@ -18,22 +18,22 @@ using StringTools;
 
 typedef MoneyStuff =
 {
-	var lol:String;
-	var pennies:Int;
-	var nickels:Int;
-	var dimes:Int;
-	var quarters:Int;
-	var halves:Int;
-	var fulls:Int;
-	var dollars:Int;
-	var fives:Int;
-	var tens:Int;
-	var twenties:Int;
-	var fifties:Int;
-	var hundreds:Int;
-	var muni:String;
-	var time:String;
-}
+	var _lol:String;
+	var _pennies:Int;
+	var _nickels:Int;
+	var _dimes:Int;
+	var _quarters:Int;
+	var _halves:Int;
+	var _fulls:Int;
+	var _dollars:Int;
+	var _fives:Int;
+	var _tens:Int;
+	var _twenties:Int;
+	var _fifties:Int;
+	var _hundreds:Int;
+	var _muni:String;
+	var _time:String;
+};
 
 class PlayState extends FlxState
 {
@@ -79,25 +79,25 @@ class PlayState extends FlxState
 
 	override public function create()
 	{
-		_moneyStuff =
-			{
-				lol = "lol",
-				pennies = 0,
-				nickels = 0,
-				dimes = 0,
-				quarters = 0,
-				halves = 0,
-				fulls = 0,
-				dollars = 0,
-				fives = 0,
-				tens = 0,
-				twenties = 0,
-				fifties = 0,
-				hundreds = 0,
-				muni = "0.00";
-				time = Date.now().toString
-			};
-		var saveButton:FlxButton = new FlxButton(10, 10, "Save stuff", onSave);
+		_moneyStuff = {
+			_lol: "lol",
+			_pennies: 0,
+			_nickels: 0,
+			_dimes: 0,
+			_quarters: 0,
+			_halves: 0,
+			_fulls: 0,
+			_dollars: 0,
+			_fives: 0,
+			_tens: 0,
+			_twenties: 0,
+			_fifties: 0,
+			_hundreds: 0,
+			_muni: "0.00",
+			_time: Date.now().toString()
+		};
+		var saveButton:FlxButton;
+		saveButton = new FlxButton(10, 10, "Save stuff", onSave);
 		add(saveButton);
 		FlxG.log.add("button on the screen");
 
@@ -420,28 +420,27 @@ class PlayState extends FlxState
 			realMuni = "0.00";
 		}
 
-		/*_moneyStuff.dimes = dimes;
-			_moneyStuff.quarters = quarters;
-			_moneyStuff.nickels = nickels;
-			_moneyStuff.pennies = pennies;
-			_moneyStuff.fulls = fulls;
-			_moneyStuff.halves = halves;
+		_moneyStuff._dimes = dimes;
+		_moneyStuff._quarters = quarters;
+		_moneyStuff._nickels = nickels;
+		_moneyStuff._pennies = pennies;
+		_moneyStuff._fulls = fulls;
+		_moneyStuff._halves = halves;
 
-			_moneyStuff.dollars = dollars;
-			_moneyStuff.fives = fives;
-			_moneyStuff.tens = tens;
-			_moneyStuff.fifties = fifties;
-			_moneyStuff.twenties = twenties;
-			_moneyStuff.hundreds = halves;
-		 */
+		_moneyStuff._dollars = dollars;
+		_moneyStuff._fives = fives;
+		_moneyStuff._tens = tens;
+		_moneyStuff._fifties = fifties;
+		_moneyStuff._twenties = twenties;
+		_moneyStuff._hundreds = halves;
 
-		// _moneyStuff.lol = "lol";
-		// _moneyStuff.time = Date.now().toString();
+		_moneyStuff._lol = "lol";
+		_moneyStuff._time = Date.now().toString();
 	}
 
 	function onSave()
 	{
-		var stuff:String = Json.stringify(_moneyStuff);
+		var stuff:String = Json.stringify(_moneyStuff, "\n");
 
 		if ((stuff != null) && (stuff.length > 0))
 		{
@@ -449,7 +448,7 @@ class PlayState extends FlxState
 			_file.addEventListener(openfl.events.Event.COMPLETE, onSaveComplete);
 			_file.addEventListener(openfl.events.Event.CANCEL, onSaveCancel);
 			_file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
-			_file.save(stuff.trim(), "export_" + _moneyStuff.time + ".json");
+			_file.save(stuff.trim(), "export_" + _moneyStuff._time + ".json");
 		}
 	}
 
