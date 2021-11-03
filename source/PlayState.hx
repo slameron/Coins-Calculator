@@ -6,13 +6,38 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween.TweenOptions;
 import flixel.ui.FlxButton.FlxTypedButton;
+import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
+import haxe.Json;
+import js.html.Event;
+import openfl.events.IOErrorEvent;
+import openfl.net.FileReference;
 import openfl.text.TextFormatAlign;
 
 using StringTools;
 
+typedef MoneyStuff =
+{
+	var lol:String;
+	var pennies:Int;
+	var nickels:Int;
+	var dimes:Int;
+	var quarters:Int;
+	var halves:Int;
+	var fulls:Int;
+	var dollars:Int;
+	var fives:Int;
+	var tens:Int;
+	var twenties:Int;
+	var fifties:Int;
+	var hundreds:Int;
+	var muni:String;
+	var time:String;
+}
+
 class PlayState extends FlxState
 {
+	var _file:FileReference;
 	var pennies:Int = 0;
 	var nickels:Int = 0;
 	var dimes:Int = 0;
@@ -50,8 +75,32 @@ class PlayState extends FlxState
 
 	var counters:Array<String> = ["Pennies: ", "Nickels: ", "Dimes: ", "Quarters: ", "Dollars: ", "Total: "];
 
+	var _moneyStuff:MoneyStuff;
+
 	override public function create()
 	{
+		_moneyStuff =
+			{
+				lol = "lol",
+				pennies = 0,
+				nickels = 0,
+				dimes = 0,
+				quarters = 0,
+				halves = 0,
+				fulls = 0,
+				dollars = 0,
+				fives = 0,
+				tens = 0,
+				twenties = 0,
+				fifties = 0,
+				hundreds = 0,
+				muni = "0.00";
+				time = Date.now().toString
+			};
+		var saveButton:FlxButton = new FlxButton(10, 10, "Save stuff", onSave);
+		add(saveButton);
+		FlxG.log.add("button on the screen");
+
 		if (pages[curPage] == "Coins")
 		{
 			for (i in 0...coinTypes.length)
@@ -370,5 +419,69 @@ class PlayState extends FlxState
 			fives = tens = twenties = halves = fulls = hundreds = fifties = quarters = pennies = nickels = dimes = dollars = muni = 0;
 			realMuni = "0.00";
 		}
+
+		/*_moneyStuff.dimes = dimes;
+			_moneyStuff.quarters = quarters;
+			_moneyStuff.nickels = nickels;
+			_moneyStuff.pennies = pennies;
+			_moneyStuff.fulls = fulls;
+			_moneyStuff.halves = halves;
+
+			_moneyStuff.dollars = dollars;
+			_moneyStuff.fives = fives;
+			_moneyStuff.tens = tens;
+			_moneyStuff.fifties = fifties;
+			_moneyStuff.twenties = twenties;
+			_moneyStuff.hundreds = halves;
+		 */
+
+		// _moneyStuff.lol = "lol";
+		// _moneyStuff.time = Date.now().toString();
+	}
+
+	function onSave()
+	{
+		var stuff:String = Json.stringify(_moneyStuff);
+
+		if ((stuff != null) && (stuff.length > 0))
+		{
+			_file = new FileReference();
+			_file.addEventListener(openfl.events.Event.COMPLETE, onSaveComplete);
+			_file.addEventListener(openfl.events.Event.CANCEL, onSaveCancel);
+			_file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+			_file.save(stuff.trim(), "export_" + _moneyStuff.time + ".json");
+		}
+	}
+
+	function onSaveComplete(_):Void
+	{
+		_file.removeEventListener(openfl.events.Event.COMPLETE, onSaveComplete);
+		_file.removeEventListener(openfl.events.Event.CANCEL, onSaveCancel);
+		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+		_file = null;
+		FlxG.log.notice("Successfully saved LEVEL DATA.");
+	}
+
+	/**
+	 * Called when the save file dialog is cancelled.
+	 */
+	function onSaveCancel(_):Void
+	{
+		_file.removeEventListener(openfl.events.Event.COMPLETE, onSaveComplete);
+		_file.removeEventListener(openfl.events.Event.CANCEL, onSaveCancel);
+		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+		_file = null;
+	}
+
+	/**
+	 * Called if there is an error while saving the gameplay recording.
+	 */
+	function onSaveError(_):Void
+	{
+		_file.removeEventListener(openfl.events.Event.COMPLETE, onSaveComplete);
+		_file.removeEventListener(openfl.events.Event.CANCEL, onSaveCancel);
+		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+		_file = null;
+		FlxG.log.error("Problem saving Level data");
 	}
 }
