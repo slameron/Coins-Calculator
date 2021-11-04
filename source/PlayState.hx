@@ -18,7 +18,6 @@ using StringTools;
 
 typedef MoneyStuff =
 {
-	var _lol:String;
 	var _pennies:Int;
 	var _nickels:Int;
 	var _dimes:Int;
@@ -80,7 +79,6 @@ class PlayState extends FlxState
 	override public function create()
 	{
 		_moneyStuff = {
-			_lol: "lol",
 			_pennies: 0,
 			_nickels: 0,
 			_dimes: 0,
@@ -434,7 +432,7 @@ class PlayState extends FlxState
 		_moneyStuff._twenties = twenties;
 		_moneyStuff._hundreds = halves;
 
-		_moneyStuff._lol = "lol";
+		_moneyStuff._muni = realMuni;
 		_moneyStuff._time = Date.now().toString();
 	}
 
